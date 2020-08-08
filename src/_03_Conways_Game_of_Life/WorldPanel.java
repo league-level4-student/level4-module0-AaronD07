@@ -31,29 +31,31 @@ Cell[][] cells;
 		this.cellsPerRow = cpr;
 	
 		//2. Calculate the cell size.
-		int x = cells.length;
+		int cellSize = h/cpr;
+		
+
 		//3. Initialize the cell array to the appropriate size.
-		cells = new Cell[x][x];
+		cells = new Cell[cpr][cpr];
 		//3. Iterate through the array and initialize each cell.
 		//   Don't forget to consider the cell's dimensions when 
 		//   passing in the location.
 		for(int i=0; i<cells.length; i++) {
 			for(int j=0; j<cells[i].length; j++) {
-				cells[i][j]=new Cell(10, 10, j);
+				cells[i][j]=new Cell(j*cellSize, i*cellSize, cellSize);
 			}
 			}
 	}
 	
 	public void randomizeCells() {
-		Random random = new Random(1);
+		Random random = new Random();
 		//4. Iterate through each cell and randomly set each
 		//   cell's isAlive memeber to true of false
 		for(int i=0; i<cells.length; i++) {
 			for(int j=0; j<cells[i].length; j++) {
-				if (random.nextInt()==0) {
+				if (random.nextInt(2)==0) {
 					cells[i][j].isAlive=false;
 				}
-				else if (random.nextInt()==1) {
+				else if (random.nextInt(2)==1) {
 					cells[i][j].isAlive=true;
 				}
 			}
@@ -107,15 +109,17 @@ Cell[][] cells;
 		for(int i=0; i<cells.length; i++) {
 			for(int j=0; j<cells[i].length; j++) {
 				livingNeighbors[i][j]=getLivingNeighbors(i, j);
-				if(livingNeighbors[i][j]==0) {
-					
-				}
+				
 			}
 		}
 		
 		
 		//8. check if each cell should live or die
-	
+		for(int i=0; i<cells.length; i++) {
+			for(int j=0; j<cells[i].length; j++) {
+			cells[i][j].liveOrDie(livingNeighbors[i][j]);	
+			}
+			}
 		
 		
 		
@@ -127,7 +131,7 @@ Cell[][] cells;
 	//   living neighbors there are of the 
 	//   cell identified by x and y
 	public int getLivingNeighbors(int x, int y){
-		Random random = new Random(7);
+		Random random = new Random();
 		return random.nextInt();
 	}
 
@@ -155,7 +159,18 @@ Cell[][] cells;
 		//    the isAlive variable for that cell.
 		for(int i=0; i<cells.length; i++) {
 			for(int j=0; j<cells[i].length; j++) {
-				if(e.getX()==cells[i]*10)		
+				if(e.getX()==i*10&&e.getY()==j*10){	{
+					boolean x = cells[i][j].isAlive;
+					if(x==false) {
+						cells[i][j].isAlive = true;
+					}
+					if(x==true) {
+						cells[i][j].isAlive = false;
+				
+						}
+					}
+					
+				}
 			}
 		}
 		
