@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Random;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -36,11 +37,12 @@ Cell[][] cells;
 
 		//3. Initialize the cell array to the appropriate size.
 		cells = new Cell[cpr][cpr];
+		
 		//3. Iterate through the array and initialize each cell.
 		//   Don't forget to consider the cell's dimensions when 
 		//   passing in the location.
 		for(int i=0; i<cells.length; i++) {
-			for(int j=0; j<cells[i].length; j++) {
+			for(int j=0; j<cells[0].length; j++) {
 				cells[i][j]=new Cell(j*cellSize, i*cellSize, cellSize);
 			}
 			}
@@ -51,7 +53,7 @@ Cell[][] cells;
 		//4. Iterate through each cell and randomly set each
 		//   cell's isAlive memeber to true of false
 		for(int i=0; i<cells.length; i++) {
-			for(int j=0; j<cells[i].length; j++) {
+			for(int j=0; j<cells[0].length; j++) {
 				if (random.nextInt(2)==0) {
 					cells[i][j].isAlive=false;
 				}
@@ -66,7 +68,7 @@ Cell[][] cells;
 	public void clearCells() {
 		//5. Iterate through the cells and set them all to dead.
 		for(int i=0; i<cells.length; i++) {
-			for(int j=0; j<cells[i].length; j++) {
+			for(int j=0; j<cells[0].length; j++) {
 				cells[i][j].isAlive=false;
 			}
 			}
@@ -89,8 +91,9 @@ Cell[][] cells;
 	public void paintComponent(Graphics g) {
 		//6. Iterate through the cells and draw them all
 		for(int i=0; i<cells.length; i++) {
-			for(int j=0; j<cells[i].length; j++) {
+			for(int j=0; j<cells[0].length; j++) {
 				cells[i][j].draw(g);
+				System.out.println("hello");
 			}
 			}
 		
@@ -106,8 +109,8 @@ Cell[][] cells;
 	
 		//7. iterate through cells and fill in the livingNeighbors array
 		// . using the getLivingNeighbors method.
-		for(int i=0; i<cells.length; i++) {
-			for(int j=0; j<cells[i].length; j++) {
+		for(int i=0; i<cellsPerRow; i++) {
+			for(int j=0; j<cellsPerRow; j++) {
 				livingNeighbors[i][j]=getLivingNeighbors(i, j);
 				
 			}
@@ -115,8 +118,8 @@ Cell[][] cells;
 		
 		
 		//8. check if each cell should live or die
-		for(int i=0; i<cells.length; i++) {
-			for(int j=0; j<cells[i].length; j++) {
+		for(int i=0; i<cellsPerRow; i++) {
+			for(int j=0; j<cellsPerRow; j++) {
 			cells[i][j].liveOrDie(livingNeighbors[i][j]);	
 			}
 			}
@@ -131,9 +134,36 @@ Cell[][] cells;
 	//   living neighbors there are of the 
 	//   cell identified by x and y
 	public int getLivingNeighbors(int x, int y){
-		Random random = new Random();
-		return random.nextInt();
-	}
+		int livingNeighbors = 0;
+		if(x!=0 && cells[x-1][y].isAlive) {
+			livingNeighbors++;
+			}
+		if(y!=0 && cells[x][y-1].isAlive) {
+			livingNeighbors++;
+			}
+		if(x!=cells.length-1&& cells[x+1][y].isAlive) {
+			livingNeighbors++;
+			}
+		if(y!=cells.length-1 &&cells[x][y+1].isAlive) {
+			livingNeighbors++;
+			}
+		if(x!=cells.length-1&& y!=0 &&cells[x+1][y-1].isAlive) {
+			livingNeighbors++;
+			}
+		if(x!=0 &&y!=cells.length-1&&cells[x-1][y+1].isAlive) {
+			livingNeighbors++;
+			}
+		if(y!= cells.length-1 && x!=cells.length-1&& cells[x+1][y+1].isAlive) {
+			livingNeighbors++;
+			}
+		if(x!=0 &&y!=0 && cells[x-1][y-1].isAlive) {
+			livingNeighbors++;
+			}
+		
+		
+		return livingNeighbors;
+		
+		}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -157,17 +187,12 @@ Cell[][] cells;
 		//10. Use e.getX() and e.getY() to determine
 		//    which cell is clicked. Then toggle
 		//    the isAlive variable for that cell.
-		for(int i=0; i<cells.length; i++) {
-			for(int j=0; j<cells[i].length; j++) {
-				if(e.getX()==i*10&&e.getY()==j*10){	{
-					boolean x = cells[i][j].isAlive;
-					if(x==false) {
-						cells[i][j].isAlive = true;
-					}
-					if(x==true) {
-						cells[i][j].isAlive = false;
+		for(int i=0; i<cellsPerRow; i++) {
+			for(int j=0; j<cellsPerRow; j++) {
+				Cell c= cells[i][j];
+				if(e.getX()>c.getX()  &&  e.getX()<(c.getX()+cellSize)  &&  e.getY()>c.getY()  &&  e.getY()<(c.getY()+cellSize)){	{
 				
-						}
+	c.isAlive=!c.isAlive;
 					}
 					
 				}
