@@ -32,7 +32,7 @@ Cell[][] cells;
 		this.cellsPerRow = cpr;
 	
 		//2. Calculate the cell size.
-		int cellSize = h/cpr;
+		cellSize = h/cpr;
 		
 
 		//3. Initialize the cell array to the appropriate size.
@@ -193,13 +193,18 @@ Cell[][] cells;
 				if(e.getX()>c.getX()  &&  e.getX()<(c.getX()+cellSize)  &&  e.getY()>c.getY()  &&  e.getY()<(c.getY()+cellSize)){	{
 				
 	c.isAlive=!c.isAlive;
+	
+	
 					}
 					
 				}
 			}
+			repaint();
+
+			
 		}
 		
-		repaint();
+		
 	}
 
 	@Override
